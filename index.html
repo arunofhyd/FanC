@@ -177,6 +177,28 @@
             </a>
         </div>
 
+        <!-- Launch Video Showcase -->
+        <div class="mt-14 max-w-4xl mx-auto">
+            <div class="relative rounded-2xl overflow-hidden border border-white/10 shadow-[0_25px_70px_rgba(0,0,0,0.85)] bg-black/60">
+                <video id="fanc-launch-video" class="w-full aspect-video object-cover" poster="brag.jpg" playsinline preload="metadata" controls>
+                    <source src="brag.mp4" type="video/mp4">
+                    Your browser does not support the video tag.
+                </video>
+                <div class="p-3.5 bg-brand-panel/90 backdrop-blur-md border-t border-white/10 flex flex-col sm:flex-row items-center justify-between gap-3 text-xs text-gray-400">
+                    <div class="flex items-center gap-2">
+                        <span class="inline-block w-2.5 h-2.5 rounded-full bg-brand-cyan animate-pulse"></span>
+                        <span class="font-semibold text-white">FanC Launch Film</span>
+                        <span>• 20s 1080p Product Tour (4.0MB)</span>
+                    </div>
+                    <div class="flex items-center gap-3">
+                        <button onclick="toggleVideoPlayback()" id="video-action-btn" class="px-3 py-1 rounded bg-brand-cyan/10 hover:bg-brand-cyan/20 text-brand-cyan border border-brand-cyan/30 transition-all font-sans font-semibold">
+                            ▶ Play Film
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </div>
+
         <!-- Live Preview Mockup -->
         <div class="mt-16 relative group max-w-3xl mx-auto">
             <div class="absolute -inset-1 bg-gradient-to-r from-brand-cyan to-brand-deep rounded-xl blur opacity-25 group-hover:opacity-50 transition duration-1000"></div>
@@ -486,6 +508,37 @@
             const el = document.getElementById(id);
             if (el) el.scrollBy({ left: amount, behavior: 'smooth' });
         }
+
+        function toggleVideoPlayback() {
+            const video = document.getElementById('fanc-launch-video');
+            const btn = document.getElementById('video-action-btn');
+            if (!video) return;
+            if (video.paused) {
+                video.play();
+                if (btn) btn.textContent = '⏸ Pause Film';
+            } else {
+                video.pause();
+                if (btn) btn.textContent = '▶ Play Film';
+            }
+        }
+
+        document.addEventListener('DOMContentLoaded', function() {
+            const vid = document.getElementById('fanc-launch-video');
+            if (vid) {
+                vid.addEventListener('play', () => {
+                    const btn = document.getElementById('video-action-btn');
+                    if (btn) btn.textContent = '⏸ Pause Film';
+                });
+                vid.addEventListener('pause', () => {
+                    const btn = document.getElementById('video-action-btn');
+                    if (btn) btn.textContent = '▶ Play Film';
+                });
+                vid.addEventListener('ended', () => {
+                    const btn = document.getElementById('video-action-btn');
+                    if (btn) btn.textContent = '▶ Replay Film';
+                });
+            }
+        });
 
         // Version pill & changelog from version.json
         fetch('version.json').then(r => r.json()).then(data => {

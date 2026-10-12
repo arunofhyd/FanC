@@ -1,0 +1,6 @@
+Stop letting your Apple Silicon Mac throttle before fans kick in.
+
+FanC brings intelligent, proactive thermal control to M1–M6 Macs with rate-of-change aware curves, 120Hz tachometers, and daemon-level safety. 100% Free & Open Source.
+
+Install with one command:
+curl -fsSL https://raw.githubusercontent.com/arunofhyd/FanC/main/install-fanc.command | bash
