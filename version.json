@@ -1,0 +1,18 @@
+{
+  "version": "1.0.0",
+  "downloadURL": "https://github.com/arunofhyd/FanC/releases/latest",
+  "changelog": [
+    {
+      "version": "1.0.0",
+      "date": "2026-10-12",
+      "changes": [
+        "Initial release of FanC by Arun Thomas.",
+        "Complete modern UI uplift with animated tachometers, thermal heatmap chips, and live profile indicators.",
+        "Proactive multi-sensor cooling engine tuned for Apple Silicon (M1, M2, M3, M4, M5, M6).",
+        "Hardware safety override (95°C daemon backstop) and crash-recovery watchdog.",
+        "Integrated Signature About Window with one-click update checks.",
+        "Full-featured 'fanc' CLI for terminal power users, automation, and daemon control."
+      ]
+    }
+  ]
+}
