@@ -23,7 +23,7 @@
     <meta property="twitter:card" content="summary_large_image">
     <meta property="twitter:url" content="https://fanc-aoh.vercel.app/">
     <meta property="twitter:title" content="FanC — Intelligent Fan Control &amp; Thermal Engine for Apple Silicon">
-    <meta property="twitter:description" content="Proactive thermal management for Apple Silicon. Built the hard way.">
+    <meta property="twitter:description" content="Proactive thermal management for Apple Silicon. Direct SMC hardware access.">
     <meta property="twitter:image" content="https://fanc-aoh.vercel.app/brag.jpg">
 
     <!-- JSON-LD Structured Data -->
@@ -244,11 +244,11 @@
 
             <h1 class="text-4xl sm:text-6xl md:text-7xl lg:text-8xl font-bold tracking-tight text-ink-strongLight dark:text-ink-strongDark leading-[1.05] mb-6">
                 Proactive thermal control.<br>
-                <span class="font-serif italic font-normal text-amber-fanc selection:text-white">Built the hard way.</span>
+                <span class="font-serif italic font-normal text-amber-fanc selection:text-white">For Apple Silicon.</span>
             </h1>
 
             <p class="text-lg sm:text-xl text-ink-mutedLight dark:text-ink-mutedDark max-w-3xl leading-relaxed mb-10">
-                macOS lets Apple Silicon heat up to 95°C+ before ramping up fans. <strong class="text-ink-strongLight dark:text-ink-strongDark font-semibold">FanC</strong> acts proactively. Direct SMC hardware register access, dual tachometer visualization, adaptive fan curves, and a built-in 95°C hardware safety backstop to prevent CPU thermal throttling.
+                macOS defaults let Apple Silicon heat up before ramping fans. <strong class="text-ink-strongLight dark:text-ink-strongDark font-semibold">FanC</strong> connects directly to SMC registers to increase air flow earlier, show live fan RPMs, and protect hardware with an automatic 95°C safety override.
             </p>
 
             <!-- 1-Click Terminal Snippet & Action Bar -->
@@ -401,12 +401,9 @@
                 
                 <div class="flex flex-col md:flex-row md:items-end justify-between mb-12">
                     <div>
-                        <div class="font-mono text-xs text-amber-fanc tracking-wider uppercase mb-2">Hardware Principles</div>
-                        <h2 class="text-3xl sm:text-5xl font-bold tracking-tight">Thermal precision for Apple Silicon.</h2>
+                        <div class="font-mono text-xs text-amber-fanc tracking-wider uppercase mb-2">Capabilities</div>
+                        <h2 class="text-3xl sm:text-5xl font-bold tracking-tight">Thermal control architecture.</h2>
                     </div>
-                    <p class="text-ink-mutedLight dark:text-ink-mutedDark font-mono text-xs max-w-md mt-4 md:mt-0">
-                        Designed to protect thermal health and prevent silicon degradation during prolonged compilation or 3D rendering.
-                    </p>
                 </div>
 
                 <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 border-t border-l border-borderLine-light dark:border-borderLine-dark">
@@ -437,7 +434,7 @@
                             </div>
                             <h3 class="text-xl font-semibold mb-3 tracking-tight">Proactive Pre-Cooling</h3>
                             <p class="text-sm text-ink-mutedLight dark:text-ink-mutedDark leading-relaxed">
-                                Don't wait until the chassis is scorching. FanC gently ramps air flow at 60°C so your Mac stays cool and never drops CPU frequency down to throttled states.
+                                Ramps fan speeds as workload begins rather than waiting for high junction temperatures, helping sustain peak CPU frequencies during long tasks.
                             </p>
                         </div>
                         <div class="mt-8 pt-4 border-t border-borderLine-light/60 dark:border-borderLine-dark/60 font-mono text-[11px] text-ink-faintLight dark:text-ink-faintDark">
@@ -454,7 +451,7 @@
                             </div>
                             <h3 class="text-xl font-semibold mb-3 tracking-tight">Hardware Safety Override</h3>
                             <p class="text-sm text-ink-mutedLight dark:text-ink-mutedDark leading-relaxed">
-                                Built with a failsafe watchdog: if any sensor hits 95°C, FanC immediately overrides custom profiles to 100% maximum RPM to guarantee zero silicon damage.
+                                Monitors temperatures continuously: if any sensor reaches 95°C, FanC immediately overrides manual profiles to maximum fan speed.
                             </p>
                         </div>
                         <div class="mt-8 pt-4 border-t border-borderLine-light/60 dark:border-borderLine-dark/60 font-mono text-[11px] text-ink-faintLight dark:text-ink-faintDark">
@@ -520,8 +517,8 @@
         <!-- Technical Comparison Matrix -->
         <section class="py-20 max-w-6xl mx-auto px-4 sm:px-6">
             <div class="mb-10">
-                <span class="font-mono text-xs text-amber-fanc uppercase tracking-wider">Engineering Comparison</span>
-                <h2 class="text-3xl sm:text-4xl font-bold tracking-tight mt-1">Why choose FanC?</h2>
+                <span class="font-mono text-xs text-amber-fanc uppercase tracking-wider">Comparison</span>
+                <h2 class="text-3xl sm:text-4xl font-bold tracking-tight mt-1">How FanC compares.</h2>
             </div>
 
             <div class="border border-borderLine-light dark:border-borderLine-dark rounded-lg overflow-x-auto bg-panel-light dark:bg-panel-dark">
@@ -609,7 +606,7 @@
                         <span>BY ARUN THOMAS</span>
                     </div>
                     <p class="text-ink-faintLight dark:text-ink-faintDark max-w-sm font-sans text-xs">
-                        Open-source software engineered for speed, privacy, and thermal health on macOS.
+                        Apple Silicon fan and thermal control utility. Free and open source on GitHub.
                     </p>
                 </div>
 
