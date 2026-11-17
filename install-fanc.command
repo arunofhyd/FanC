@@ -7,7 +7,21 @@
 
 set -e
 
-cd "$(dirname "$0")"
+# If not run inside a FanC repository containing Package.swift, clone into a clean temp workspace
+if [ ! -f "Package.swift" ] || [ ! -f "setup.sh" ]; then
+    SCRIPT_DIR="$( cd "$( dirname "${BASH_SOURCE[0]}" )" >/dev/null 2>&1 && pwd )"
+    if [ -f "$SCRIPT_DIR/Package.swift" ] && [ -f "$SCRIPT_DIR/setup.sh" ]; then
+        cd "$SCRIPT_DIR"
+    else
+        echo "==> Preparing clean workspace for FanC..."
+        WORK_DIR="$(mktemp -d)"
+        trap 'rm -rf "$WORK_DIR"' EXIT
+        git clone --depth 1 https://github.com/arunofhyd/FanC.git "$WORK_DIR"
+        cd "$WORK_DIR"
+    fi
+else
+    cd "$(dirname "$0")"
+fi
 
 echo "==========================================="
 echo "   🌀 Installing FanC by Arun Thomas"
