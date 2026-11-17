@@ -1,28 +1,30 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="en" class="dark">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
     <!-- SEO Meta Tags -->
-    <title>FanC | Intelligent Fan Control & Thermal Engine for Apple Silicon</title>
-    <meta name="description" content="FanC is a free, open-source fan control and proactive thermal engine for Apple Silicon Macs (M1–M6). Dual tachometer visualizer, smart adaptive curves, and 95°C safety override.">
-    <meta name="keywords" content="fan control mac, apple silicon fan control, m1 m2 m3 m4 m5 fan control, macbook fan curve, proactive cooling mac, smc fan control, fanc, macs fan control alternative">
+    <title>FanC — Intelligent Fan Control &amp; Thermal Engine for Apple Silicon</title>
+    <meta name="description" content="FanC is an open-source, proactive fan control and thermal engine for Apple Silicon Macs (M1–M4). Directly accesses SMC registers to cool before thermal throttling hits. Dual tachometer visualizer and 95°C safety override.">
+    <meta name="keywords" content="mac fan control, apple silicon fan control, m1 fan control, m2 m3 m4 thermal engine, macbook fan curve, smc fan control mac">
     <meta name="author" content="Arun Thomas">
     <meta name="robots" content="index, follow">
-    <link rel="canonical" href="https://fanc-aoh.vercel.app">
+    <link rel="canonical" href="https://fanc-aoh.vercel.app/">
 
     <!-- Open Graph / Facebook -->
     <meta property="og:type" content="website">
-    <meta property="og:url" content="https://fanc-aoh.vercel.app">
-    <meta property="og:title" content="FanC | Intelligent Fan Control for Apple Silicon">
-    <meta property="og:description" content="A proactive, hardware-safe fan control and thermal engine for Apple Silicon Macs. 100% native, free & open source.">
+    <meta property="og:url" content="https://fanc-aoh.vercel.app/">
+    <meta property="og:title" content="FanC — Intelligent Fan Control &amp; Thermal Engine for Apple Silicon">
+    <meta property="og:description" content="Proactive thermal management for Apple Silicon. Cool your Mac before macOS throttles performance.">
+    <meta property="og:image" content="https://fanc-aoh.vercel.app/brag.jpg">
 
     <!-- Twitter -->
     <meta property="twitter:card" content="summary_large_image">
-    <meta property="twitter:url" content="https://fanc-aoh.vercel.app">
-    <meta property="twitter:title" content="FanC | Intelligent Fan Control for Apple Silicon">
-    <meta property="twitter:description" content="Proactive cooling and real-time tachometer telemetry for Apple Silicon Macs.">
+    <meta property="twitter:url" content="https://fanc-aoh.vercel.app/">
+    <meta property="twitter:title" content="FanC — Intelligent Fan Control &amp; Thermal Engine for Apple Silicon">
+    <meta property="twitter:description" content="Proactive thermal management for Apple Silicon. Built the hard way.">
+    <meta property="twitter:image" content="https://fanc-aoh.vercel.app/brag.jpg">
 
     <!-- JSON-LD Structured Data -->
     <script type="application/ld+json">
@@ -30,488 +32,592 @@
       "@context": "https://schema.org",
       "@type": "SoftwareApplication",
       "name": "FanC",
-      "operatingSystem": "macOS",
+      "operatingSystem": "macOS 12.0+",
       "applicationCategory": "UtilitiesApplication",
       "offers": { "@type": "Offer", "price": "0", "priceCurrency": "USD" },
-      "description": "Intelligent, proactive fan control and thermal engine for Apple Silicon Macs.",
-      "author": { "@type": "Person", "name": "Arun Thomas" },
+      "description": "Intelligent fan control and proactive thermal engine for Apple Silicon Macs.",
+      "author": { "@type": "Person", "name": "Arun Thomas", "url": "https://github.com/arunofhyd" },
       "softwareVersion": "1.0.0"
     }
     </script>
 
-    <!-- Dynamic Cache-Busted Favicons -->
-    <script>
-        const APP_VERSION = '1.0.0';
-        [
-            { rel: 'shortcut icon', href: `AppIcon.png?v=${APP_VERSION}` },
-            { rel: 'icon', href: `logo.svg?v=${APP_VERSION}`, type: 'image/svg+xml' },
-            { rel: 'icon', href: `AppIcon.png?v=${APP_VERSION}`, type: 'image/png' },
-            { rel: 'apple-touch-icon', href: `AppIcon.png?v=${APP_VERSION}` }
-        ].forEach(attr => {
-            const link = document.createElement('link');
-            Object.assign(link, attr);
-            document.head.appendChild(link);
-        });
-    </script>
+    <link rel="icon" href="logo.svg" type="image/svg+xml">
+
+    <!-- ArtCraft Font Stack: Instrument Serif + Inter + Geist Mono -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Geist+Mono:wght@400;500;600;700&family=Instrument+Serif:ital@0;1&family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+
+    <!-- Tailwind CSS with ArtCraft Design Tokens -->
     <script src="https://cdn.tailwindcss.com"></script>
     <script>
         if (history.scrollRestoration) { history.scrollRestoration = 'manual'; }
+        
+        try {
+            const saved = localStorage.getItem('theme');
+            if (saved === 'light') document.documentElement.classList.remove('dark');
+            else document.documentElement.classList.add('dark');
+        } catch (_) {}
+
         tailwind.config = {
+            darkMode: 'class',
             theme: {
                 extend: {
                     colors: {
-                        brand: {
-                            cyan: '#00e5ff',
-                            deep: '#0072ff',
-                            ink: '#0b0d10',
-                            panel: '#15181d'
+                        canvas: {
+                            light: '#f2f1ee',
+                            dark: '#0b0b0c',
+                        },
+                        panel: {
+                            light: '#ffffff',
+                            dark: '#131316',
+                            subtleDark: '#17171c',
+                            subtleLight: '#f8f7f5'
+                        },
+                        borderLine: {
+                            light: '#dedcd5',
+                            dark: '#222228',
+                            strongDark: '#32323b',
+                            strongLight: '#c9c6bd'
+                        },
+                        ink: {
+                            strongDark: '#f5f5f7',
+                            mutedDark: '#8e8e98',
+                            faintDark: '#565660',
+                            strongLight: '#18181b',
+                            mutedLight: '#65656e',
+                            faintLight: '#a1a1aa'
+                        },
+                        amber: {
+                            fanc: '#F59E0B',
+                            flame: '#FF9500'
                         }
                     },
                     fontFamily: {
                         sans: ['Inter', 'system-ui', 'sans-serif'],
-                        mono: ['Fira Code', 'monospace']
+                        serif: ['"Instrument Serif"', 'serif'],
+                        mono: ['"Geist Mono"', 'monospace'],
                     }
                 }
             }
         }
-        function copyEmail(btn) {
-            navigator.clipboard.writeText('arunthomas04042001@gmail.com').then(() => {
-                const original = "Contact Developer";
-                btn.innerText = 'Email Copied!';
-                btn.classList.add('text-brand-cyan');
-                setTimeout(() => { btn.innerText = original; btn.classList.remove('text-brand-cyan'); }, 2000);
-            });
+
+        function toggleTheme() {
+            const html = document.documentElement;
+            if (html.classList.contains('dark')) {
+                html.classList.remove('dark');
+                localStorage.setItem('theme', 'light');
+            } else {
+                html.classList.add('dark');
+                localStorage.setItem('theme', 'dark');
+            }
         }
-        function copyToClipboard(text, elementId) {
-            navigator.clipboard.writeText(text).then(() => {
-                const toast = document.getElementById(elementId);
-                if (toast) {
-                    const originalText = toast.innerText;
-                    toast.innerText = 'Copied!';
-                    setTimeout(() => {
-                        toast.innerText = originalText;
-                    }, 2000);
-                }
+
+        function copyTerminalCommand(btn) {
+            const cmd = 'curl -fsSL https://raw.githubusercontent.com/arunofhyd/FanC/main/setup.sh | bash';
+            const label = btn.querySelector('.copy-label') || btn;
+            const original = label.innerText;
+
+            navigator.clipboard.writeText(cmd).then(() => {
+                label.innerText = 'COPIED TO CLIPBOARD';
+                btn.classList.add('border-amber-fanc');
+                setTimeout(() => {
+                    label.innerText = original;
+                    btn.classList.remove('border-amber-fanc');
+                }, 2200);
+            }).catch(() => {
+                label.innerText = 'COPIED';
+                setTimeout(() => { label.innerText = original; }, 2200);
             });
         }
     </script>
+
     <style>
-        @import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap');
-        @import url('https://fonts.googleapis.com/css2?family=Fira+Code:wght@400;600&display=swap');
-        body { background-color: #0b0d10; color: #e6e8eb; }
-        .gradient-text {
-            background: linear-gradient(90deg, #00f2fe, #4facfe);
-            -webkit-background-clip: text; -webkit-text-fill-color: transparent;
+        .blueprint-grid {
+            background-size: 32px 32px;
+            background-image: 
+                linear-gradient(to right, rgba(120, 120, 130, 0.05) 1px, transparent 1px),
+                linear-gradient(to bottom, rgba(120, 120, 130, 0.05) 1px, transparent 1px);
         }
-        .typing-cursor::after {
-            content: '|'; margin-left: 2px; animation: blink 1s step-end infinite;
-            color: #00e5ff; -webkit-text-fill-color: #00e5ff;
+        .spotlight-card {
+            position: relative;
         }
-        @keyframes blink { 0%,100%{opacity:1;} 50%{opacity:0;} }
-        .pill { animation: pulse-glow 3s infinite ease-in-out; }
-        @keyframes pulse-glow {
-            0%,100% { box-shadow: 0 0 5px rgba(0,229,255,0.2); border-color: rgba(0,229,255,0.3); }
-            50% { box-shadow: 0 0 20px rgba(0,229,255,0.55); border-color: rgba(0,229,255,0.8); }
+        .spotlight-card::before {
+            content: '';
+            position: absolute;
+            inset: -1px;
+            border-radius: inherit;
+            background: radial-gradient(400px circle at var(--mouse-x, -400px) var(--mouse-y, -400px), rgba(245, 158, 11, 0.25), transparent 70%);
+            pointer-events: none;
+            opacity: 0;
+            transition: opacity 0.3s;
+            z-index: 1;
         }
-        /* Custom scrollbar for horizontal carousel */
-        #changelog-container::-webkit-scrollbar { height: 6px; }
-        #changelog-container::-webkit-scrollbar-track { background: rgba(255, 255, 255, 0.05); border-radius: 9999px; }
-        #changelog-container::-webkit-scrollbar-thumb { background: rgba(0, 229, 255, 0.3); border-radius: 9999px; }
-        #changelog-container::-webkit-scrollbar-thumb:hover { background: rgba(0, 229, 255, 0.6); }
+        .spotlight-card:hover::before {
+            opacity: 1;
+        }
+        .spotlight-card > * {
+            position: relative;
+            z-index: 2;
+        }
+        @keyframes fan-spin {
+            from { transform: rotate(0deg); }
+            to { transform: rotate(360deg); }
+        }
+        .fan-blade {
+            animation: fan-spin var(--fan-speed, 2s) linear infinite;
+        }
     </style>
 </head>
-<body class="antialiased selection:bg-brand-cyan selection:text-black">
+<body class="bg-canvas-light dark:bg-canvas-dark text-ink-strongLight dark:text-ink-strongDark font-sans antialiased selection:bg-amber-fanc selection:text-black transition-colors duration-200">
 
-    <!-- Navbar -->
-    <nav class="fixed w-full z-50 bg-brand-ink/90 backdrop-blur-md border-b border-white/10">
-        <div class="max-w-6xl mx-auto px-6 h-16 flex items-center justify-between">
-            <div class="flex items-center gap-3">
-                <img src="logo.svg" alt="FanC Logo" width="28" height="28">
-                <span class="font-bold text-xl tracking-tight text-white">FanC</span>
+    <!-- Top Technical HUD Navigation -->
+    <header class="sticky top-0 z-50 backdrop-blur-md bg-canvas-light/90 dark:bg-canvas-dark/90 border-b border-borderLine-light dark:border-borderLine-dark transition-colors duration-200">
+        <div class="max-w-6xl mx-auto px-4 sm:px-6 h-14 flex items-center justify-between font-mono text-xs tracking-wider">
+            
+            <!-- Left: Brand + Status -->
+            <div class="flex items-center space-x-3">
+                <a href="/" class="flex items-center space-x-2.5 group">
+                    <img src="logo.svg" alt="FanC" class="w-5 h-5 rounded">
+                    <span class="font-bold text-sm tracking-tight font-sans text-neutral-900 dark:text-white">FANC</span>
+                </a>
+                <span class="text-neutral-400 dark:text-neutral-600 hidden sm:inline">/</span>
+                <span class="text-ink-mutedLight dark:text-ink-mutedDark hidden sm:inline uppercase text-[11px]">Apple Silicon Thermal Engine</span>
             </div>
-            <div class="hidden md:flex gap-8 text-sm font-medium text-gray-400">
-                <a href="#features" class="hover:text-brand-cyan transition-colors">Features</a>
-                <a href="#why-fanc" class="hover:text-brand-cyan transition-colors">Why FanC</a>
-                <a href="#how-it-works" class="hover:text-brand-cyan transition-colors">How it Works</a>
-                <a href="#install" class="hover:text-brand-cyan transition-colors">Install</a>
-                <a href="#changelog" class="hover:text-brand-cyan transition-colors">Changelog</a>
+
+            <!-- Center: Technical Specs -->
+            <div class="hidden md:flex items-center space-x-4 text-[11px] text-ink-mutedLight dark:text-ink-mutedDark font-mono border border-borderLine-light dark:border-borderLine-dark px-3 py-1 rounded bg-panel-light dark:bg-panel-dark">
+                <span>DIRECT SMC REGISTERS</span>
+                <span>•</span>
+                <span>M1 / M2 / M3 / M4</span>
+                <span>•</span>
+                <span class="text-amber-fanc font-semibold">95°C HARDWARE OVERRIDE</span>
             </div>
-            <a href="https://github.com/arunofhyd/FanC" target="_blank" rel="noopener noreferrer"
-               class="bg-white/10 text-white px-4 py-1.5 rounded-md text-sm font-semibold hover:bg-white/20 transition-all border border-white/10 flex items-center gap-1.5">
-               <svg class="w-4 h-4 fill-current" viewBox="0 0 24 24"><path d="M12 0C5.37 0 0 5.37 0 12c0 5.31 3.435 9.795 8.205 11.385.6.105.825-.255.825-.57 0-.285-.015-1.23-.015-2.235-3.015.555-3.795-.735-4.035-1.41-.135-.345-.72-1.41-1.23-1.695-.42-.225-1.02-.78-.015-.795.945-.015 1.62.87 1.845 1.23 1.08 1.815 2.805 1.305 3.495.99.105-.78.42-1.305.765-1.605-2.67-.3-5.46-1.335-5.46-5.925 0-1.305.465-2.385 1.23-3.225-.12-.3-.54-1.53.12-3.18 0 0 1.005-.315 3.3 1.23.96-.27 1.98-.405 3-.405s2.04.135 3 .405c2.295-1.56 3.3-1.23 3.3-1.23.66 1.65.24 2.88.12 3.18.765.84 1.23 1.905 1.23 3.225 0 4.605-2.805 5.625-5.475 5.925.435.375.81 1.095.81 2.22 0 1.605-.015 2.895-.015 3.3 0 .315.225.69.825.57A12.02 12.02 0 0024 12c0-6.63-5.37-12-12-12z"/></svg>
-               <span>View Code</span>
-            </a>
+
+            <!-- Right: Actions & Theme Toggle -->
+            <div class="flex items-center space-x-3 sm:space-x-4">
+                <a id="version-pill" href="https://github.com/arunofhyd/FanC/releases" target="_blank" rel="noopener noreferrer" 
+                   class="inline-flex items-center space-x-1.5 px-2.5 py-1 rounded border border-borderLine-light dark:border-borderLine-dark hover:border-amber-fanc/60 text-ink-mutedLight dark:text-ink-mutedDark hover:text-amber-fanc transition-all text-[11px]">
+                    <span class="version-label">v1.0.0</span>
+                    <span class="opacity-50">↗</span>
+                </a>
+
+                <button onclick="toggleTheme()" aria-label="Toggle theme" class="p-1.5 rounded border border-borderLine-light dark:border-borderLine-dark hover:text-amber-fanc text-ink-mutedLight dark:text-ink-mutedDark transition-colors">
+                    <svg class="w-3.5 h-3.5 hidden dark:block fill-current" viewBox="0 0 20 20"><path d="M10 2a1 1 0 011 1v1a1 1 0 11-2 0V3a1 1 0 011-1zm4 8a4 4 0 11-8 0 4 4 0 018 0zm-.464 4.95l.707.707a1 1 0 001.414-1.414l-.707-.707a1 1 0 00-1.414 1.414zm2.12-10.607a1 1 0 010 1.414l-.706.707a1 1 0 11-1.414-1.414l.707-.707a1 1 0 011.414 0zM17 11a1 1 0 100-2h-1a1 1 0 100 2h1zm-7 4a1 1 0 011 1v1a1 1 0 11-2 0v-1a1 1 0 011-1zM5.05 6.464A1 1 0 106.465 5.05l-.708-.707a1 1 0 00-1.414 1.414l.707.707zm1.414 8.486l-.707.707a1 1 0 01-1.414-1.414l.707-.707a1 1 0 011.414 1.414zM4 11a1 1 0 100-2H3a1 1 0 000 2h1z"/></svg>
+                    <svg class="w-3.5 h-3.5 block dark:hidden fill-current" viewBox="0 0 20 20"><path d="M17.293 13.293A8 8 0 016.707 2.707a8.001 8.001 0 1010.586 10.586z"/></svg>
+                </button>
+
+                <a href="https://github.com/arunofhyd/FanC" target="_blank" rel="noopener noreferrer" 
+                   class="hidden sm:inline-flex items-center space-x-1.5 px-3 py-1 bg-panel-light dark:bg-panel-dark border border-borderLine-light dark:border-borderLine-dark hover:border-ink-mutedLight dark:hover:border-ink-mutedDark text-ink-strongLight dark:text-ink-strongDark rounded transition-all">
+                    <svg class="w-3.5 h-3.5 fill-current" viewBox="0 0 24 24"><path d="M12 0C5.37 0 0 5.37 0 12c0 5.31 3.435 9.795 8.205 11.385.6.105.825-.255.825-.57 0-.285-.015-1.23-.015-2.235-3.015.555-3.795-.735-4.035-1.41-.135-.345-.72-1.41-1.23-1.695-.42-.225-1.02-.78-.015-.795.945-.015 1.62.87 1.845 1.23 1.08 1.815 2.805 1.305 3.495.99.105-.78.42-1.305.765-1.605-2.67-.3-5.46-1.335-5.46-5.925 0-1.305.465-2.385 1.23-3.225-.12-.3-.54-1.53.12-3.18 0 0 1.005-.315 3.3 1.23.96-.27 1.98-.405 3-.405s2.04.135 3 .405c2.295-1.56 3.3-1.23 3.3-1.23.66 1.65.24 2.88.12 3.18.765.84 1.23 1.905 1.23 3.225 0 4.605-2.805 5.625-5.475 5.925.435.375.81 1.095.81 2.22 0 1.605-.015 2.895-.015 3.3 0 .315.225.69.825.57A12.02 12.02 0 0024 12c0-6.63-5.37-12-12-12z"/></svg>
+                    <span>GitHub</span>
+                </a>
+            </div>
         </div>
-    </nav>
+    </header>
 
-    <!-- Hero -->
-    <section class="pt-28 pb-16 px-6 max-w-7xl mx-auto text-center">
-        <a id="version-pill" href="https://github.com/arunofhyd/FanC/releases/latest" target="_blank" rel="noopener noreferrer"
-           class="pill inline-flex items-center gap-1.5 px-3.5 py-1 mb-6 rounded-full bg-brand-cyan/10 border border-brand-cyan/30 text-brand-cyan text-xs font-mono hover:bg-brand-cyan/20 transition-all cursor-pointer">
-            <span>Latest Version</span>
-            <span class="opacity-60 text-[10px]">↗</span>
-        </a>
+    <!-- Main Content Blueprint Container -->
+    <main class="blueprint-grid min-h-screen">
 
-        <h1 class="text-5xl md:text-7xl font-bold mb-6 tracking-tight">
-            Your Mac's Thermals.<br>
-            <span id="typing-text" class="gradient-text typing-cursor">Kept ice cool.</span>
-        </h1>
-        <p class="text-xl text-gray-400 mb-4 max-w-2xl mx-auto leading-relaxed">
-            Intelligent, proactive fan control and thermal engine for Apple Silicon Macs. Dual tachometer gauges, smart predictive curves, and daemon-enforced safety.
-        </p>
-        <p class="text-xl font-bold text-gray-300 mb-6 max-w-2xl mx-auto">
-            100% Native Swift. Zero telemetry. No subscriptions. Completely open source.
-        </p>
-        <p class="text-sm font-semibold text-brand-cyan mb-10 tracking-widest flex items-center justify-center gap-2">
-            ENGINEERED FOR
-            <svg class="w-4 h-4 fill-current" viewBox="0 0 24 24"><path d="M12.152 6.896c-.948 0-2.415-1.078-3.96-1.04-2.04.027-3.91 1.183-4.961 3.014-2.127 3.675-.552 9.127 1.519 12.09 1.013 1.454 2.208 3.09 3.792 3.039 1.52-.065 2.09-.987 3.935-.987 1.831 0 2.35.987 3.96.948 1.637-.026 2.676-1.48 3.676-2.948 1.156-1.688 1.636-3.325 1.662-3.415-.039-.013-3.182-1.221-3.22-4.857-.026-3.04 2.48-4.494 2.597-4.559-1.429-2.09-3.623-2.324-4.39-2.376-2-.156-3.675 1.09-4.61 1.09zM15.53 3.83c.843-1.012 1.4-2.427 1.245-3.83-1.207.052-2.662.805-3.532 1.818-.78.896-1.454 2.338-1.273 3.714 1.338.104 2.715-.688 3.559-1.701"/></svg>
-            APPLE SILICON (M1 – M6)
-        </p>
-        <div class="flex flex-col sm:flex-row gap-4 justify-center items-center">
-            <a href="#install" class="bg-brand-cyan text-black px-8 py-3 rounded-lg font-bold hover:bg-cyan-300 transition-all shadow-[0_0_20px_rgba(0,229,255,0.4)] flex items-center gap-2">
-                <span>⚡ Install via Terminal</span>
-            </a>
-            <a href="install-fanc.command" download="install-fanc.command" class="bg-white/5 border border-white/10 text-gray-300 hover:text-white hover:bg-white/10 px-6 py-3 rounded-lg font-semibold transition-all flex items-center gap-2">
-                <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-4l-4 4m0 0l-4-4m4 4V4"></path></svg>
-                <span>Download .command</span>
-            </a>
-        </div>
+        <!-- Hero Section -->
+        <section class="max-w-6xl mx-auto px-4 sm:px-6 pt-16 sm:pt-24 pb-16">
+            
+            <div class="inline-flex items-center space-x-2 font-mono text-xs text-ink-mutedLight dark:text-ink-mutedDark border border-borderLine-light dark:border-borderLine-dark px-3 py-1 rounded bg-panel-light dark:bg-panel-dark mb-8">
+                <span class="text-amber-fanc font-bold">01</span>
+                <span class="opacity-40">/</span>
+                <span>HARDWARE THERMAL MANAGEMENT</span>
+                <span class="opacity-40">•</span>
+                <span class="text-emerald-500 font-semibold">DIRECT SMC</span>
+            </div>
 
-        <!-- Launch Video Showcase -->
-        <div class="mt-14 max-w-4xl mx-auto">
-            <div class="relative rounded-2xl overflow-hidden border border-white/10 shadow-[0_25px_70px_rgba(0,0,0,0.85)] bg-black/60">
-                <video id="fanc-launch-video" class="w-full aspect-video object-cover" poster="brag.jpg" playsinline preload="metadata" controls>
-                    <source src="brag.mp4" type="video/mp4">
-                    Your browser does not support the video tag.
-                </video>
-                <div class="p-3.5 bg-brand-panel/90 backdrop-blur-md border-t border-white/10 flex flex-col sm:flex-row items-center justify-between gap-3 text-xs text-gray-400">
-                    <div class="flex items-center gap-2">
-                        <span class="inline-block w-2.5 h-2.5 rounded-full bg-brand-cyan animate-pulse"></span>
-                        <span class="font-semibold text-white">FanC Launch Film</span>
-                        <span>• 20s 1080p Product Tour (4.0MB)</span>
+            <h1 class="text-4xl sm:text-6xl md:text-7xl lg:text-8xl font-bold tracking-tight text-ink-strongLight dark:text-ink-strongDark leading-[1.05] mb-6">
+                Proactive thermal control.<br>
+                <span class="font-serif italic font-normal text-amber-fanc selection:text-white">Built the hard way.</span>
+            </h1>
+
+            <p class="text-lg sm:text-xl text-ink-mutedLight dark:text-ink-mutedDark max-w-3xl leading-relaxed mb-10">
+                macOS lets Apple Silicon heat up to 95°C+ before ramping up fans. <strong class="text-ink-strongLight dark:text-ink-strongDark font-semibold">FanC</strong> acts proactively. Direct SMC hardware register access, dual tachometer visualization, adaptive fan curves, and a built-in 95°C hardware safety backstop to prevent CPU thermal throttling.
+            </p>
+
+            <!-- 1-Click Terminal Snippet & Action Bar -->
+            <div class="space-y-4 max-w-3xl">
+                <div class="p-1 rounded-lg border border-borderLine-light dark:border-borderLine-dark bg-panel-light dark:bg-panel-dark shadow-sm">
+                    <div class="flex flex-col sm:flex-row items-stretch sm:items-center justify-between gap-3 p-3 font-mono text-xs">
+                        <div class="flex items-center space-x-2 overflow-x-auto py-1 text-ink-strongLight dark:text-ink-strongDark scrollbar-none">
+                            <span class="text-amber-fanc font-bold select-none">$</span>
+                            <span class="select-all">curl -fsSL https://raw.githubusercontent.com/arunofhyd/FanC/main/setup.sh | bash</span>
+                        </div>
+                        <button onclick="copyTerminalCommand(this)" 
+                                class="shrink-0 px-4 py-2 rounded bg-neutral-900 dark:bg-neutral-100 hover:bg-amber-fanc dark:hover:bg-amber-fanc text-white dark:text-neutral-900 dark:hover:text-black font-mono font-medium text-xs tracking-wider transition-all flex items-center justify-center space-x-1.5 border border-transparent">
+                            <svg class="w-3.5 h-3.5 fill-current" viewBox="0 0 24 24"><path d="M16 1H4c-1.1 0-2 .9-2 2v14h2V3h12V1zm3 4H8c-1.1 0-2 .9-2 2v14c0 1.1.9 2 2 2h11c1.1 0 2-.9 2-2V7c0-1.1-.9-2-2-2zm0 16H8V7h11v14z"/></svg>
+                            <span class="copy-label">COPY COMMAND</span>
+                        </button>
                     </div>
-                    <div class="flex items-center gap-3">
-                        <button onclick="toggleVideoPlayback()" id="video-action-btn" class="px-3 py-1 rounded bg-brand-cyan/10 hover:bg-brand-cyan/20 text-brand-cyan border border-brand-cyan/30 transition-all font-sans font-semibold">
+                </div>
+
+                <div class="flex flex-wrap items-center gap-3 pt-2 font-mono text-xs text-ink-mutedLight dark:text-ink-mutedDark">
+                    <a href="install-fanc.command" download="install-fanc.command" 
+                       class="inline-flex items-center space-x-2 px-4 py-2 rounded border border-borderLine-light dark:border-borderLine-dark hover:border-ink-mutedLight dark:hover:border-ink-mutedDark bg-panel-light dark:bg-panel-dark text-ink-strongLight dark:text-ink-strongDark transition-colors">
+                        <svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-4l-4 4m0 0l-4-4m4 4V4"/></svg>
+                        <span>Download install-fanc.command</span>
+                    </a>
+
+                    <a href="https://github.com/arunofhyd/FanC/releases/latest" target="_blank" rel="noopener noreferrer"
+                       class="inline-flex items-center space-x-1.5 px-3 py-2 text-ink-mutedLight dark:text-ink-mutedDark hover:text-amber-fanc transition-colors">
+                        <span>Universal Release (v1.0.0)</span>
+                        <span>↗</span>
+                    </a>
+
+                    <span class="hidden sm:inline text-neutral-400 dark:text-neutral-700">•</span>
+                    <span class="text-[11px] text-ink-faintLight dark:text-ink-faintDark">Apple Silicon Native (M1, M2, M3, M4)</span>
+                </div>
+            </div>
+
+            <!-- Video Demonstration Bezel -->
+            <div class="mt-16 border border-borderLine-light dark:border-borderLine-dark bg-panel-light dark:bg-panel-dark rounded-xl overflow-hidden shadow-2xl">
+                <div class="h-10 px-4 border-b border-borderLine-light dark:border-borderLine-dark flex items-center justify-between bg-panel-subtleLight dark:bg-panel-subtleDark font-mono text-xs text-ink-mutedLight dark:text-ink-mutedDark">
+                    <div class="flex items-center space-x-2">
+                        <span class="w-3 h-3 rounded-full bg-[#FF5F56] border border-[#E0443E]/50 inline-block"></span>
+                        <span class="w-3 h-3 rounded-full bg-[#FFBD2E] border border-[#DEA123]/50 inline-block"></span>
+                        <span class="w-3 h-3 rounded-full bg-[#27C93F] border border-[#1AAB29]/50 inline-block"></span>
+                        <span class="ml-3 text-[11px] text-ink-faintLight dark:text-ink-faintDark">FanC.app — Dual Tachometer HUD</span>
+                    </div>
+                    <div class="flex items-center space-x-3 text-[11px]">
+                        <span class="flex items-center space-x-1">
+                            <span class="w-1.5 h-1.5 rounded-full bg-amber-fanc"></span>
+                            <span>APP DEMO</span>
+                        </span>
+                        <button id="fanc-video-btn" onclick="toggleFancVideo()" class="px-2 py-0.5 rounded border border-borderLine-light dark:border-borderLine-dark hover:border-amber-fanc text-ink-strongLight dark:text-ink-strongDark transition-colors">
                             ▶ Play Film
                         </button>
                     </div>
                 </div>
-            </div>
-        </div>
 
-        <!-- Live Preview Mockup -->
-        <div class="mt-16 relative group max-w-3xl mx-auto">
-            <div class="absolute -inset-1 bg-gradient-to-r from-brand-cyan to-brand-deep rounded-xl blur opacity-25 group-hover:opacity-50 transition duration-1000"></div>
-            <div class="relative bg-brand-panel rounded-xl border border-white/10 p-6 shadow-2xl text-left">
-                <!-- Window Chrome -->
-                <div class="flex items-center justify-between mb-5">
-                    <div class="flex items-center gap-1.5">
-                        <div class="w-3 h-3 rounded-full bg-[#ff5f56]"></div>
-                        <div class="w-3 h-3 rounded-full bg-[#ffbd2e]"></div>
-                        <div class="w-3 h-3 rounded-full bg-[#27c93f]"></div>
-                        <span class="ml-3 text-xs text-gray-400 font-mono font-semibold">FanC — Menu Bar Monitor</span>
-                    </div>
-                    <span class="text-[11px] font-mono px-2 py-0.5 rounded bg-emerald-500/10 border border-emerald-500/20 text-emerald-400">Daemon Connected • 95°C Safety Active</span>
-                </div>
-
-                <!-- Tachometer Gauges -->
-                <div class="grid sm:grid-cols-2 gap-4 mb-5">
-                    <div class="bg-black/40 border border-white/5 rounded-xl p-4">
-                        <div class="flex justify-between items-center mb-2">
-                            <span class="text-xs font-medium text-gray-400">Left Turbine (Fan 0)</span>
-                            <span class="text-xs font-mono font-bold text-brand-cyan">2,311 / 5,779 RPM (40%)</span>
-                        </div>
-                        <div class="w-full bg-white/10 rounded-full h-2 overflow-hidden">
-                            <div class="bg-gradient-to-r from-brand-cyan to-blue-500 h-2 rounded-full" style="width: 40%"></div>
-                        </div>
-                    </div>
-                    <div class="bg-black/40 border border-white/5 rounded-xl p-4">
-                        <div class="flex justify-between items-center mb-2">
-                            <span class="text-xs font-medium text-gray-400">Right Turbine (Fan 1)</span>
-                            <span class="text-xs font-mono font-bold text-brand-cyan">2,500 / 6,241 RPM (40%)</span>
-                        </div>
-                        <div class="w-full bg-white/10 rounded-full h-2 overflow-hidden">
-                            <div class="bg-gradient-to-r from-brand-cyan to-blue-500 h-2 rounded-full" style="width: 40%"></div>
-                        </div>
-                    </div>
-                </div>
-
-                <!-- Sensor Heatmap Matrix -->
-                <div class="bg-black/30 border border-white/5 rounded-xl p-4 mb-4">
-                    <div class="text-xs text-gray-400 font-semibold mb-3 flex items-center justify-between">
-                        <span>LIVE SENSOR HEATMAP CLUSTER</span>
-                        <span class="text-gray-500 font-mono">36 SMC Sensors Active</span>
-                    </div>
-                    <div class="grid grid-cols-2 sm:grid-cols-5 gap-2 font-mono text-xs">
-                        <div class="p-2 rounded bg-white/5 border border-white/5 flex flex-col">
-                            <span class="text-gray-400 text-[10px]">CPU Peak</span>
-                            <span class="text-orange-400 font-bold text-sm">61.6°C</span>
-                        </div>
-                        <div class="p-2 rounded bg-white/5 border border-white/5 flex flex-col">
-                            <span class="text-gray-400 text-[10px]">CPU Avg</span>
-                            <span class="text-emerald-400 font-bold text-sm">48.2°C</span>
-                        </div>
-                        <div class="p-2 rounded bg-white/5 border border-white/5 flex flex-col">
-                            <span class="text-gray-400 text-[10px]">GPU Cores</span>
-                            <span class="text-emerald-400 font-bold text-sm">42.3°C</span>
-                        </div>
-                        <div class="p-2 rounded bg-white/5 border border-white/5 flex flex-col">
-                            <span class="text-gray-400 text-[10px]">Unified RAM</span>
-                            <span class="text-emerald-400 font-bold text-sm">38.9°C</span>
-                        </div>
-                        <div class="p-2 rounded bg-white/5 border border-white/5 flex flex-col">
-                            <span class="text-gray-400 text-[10px]">Ambient Case</span>
-                            <span class="text-emerald-400 font-bold text-sm">32.8°C</span>
-                        </div>
-                    </div>
-                </div>
-
-                <!-- Active Profile selector -->
-                <div class="flex flex-wrap items-center justify-between gap-2 pt-2 border-t border-white/5 text-xs font-medium">
-                    <div class="flex items-center gap-1.5">
-                        <span class="px-2.5 py-1 rounded-md bg-white/5 text-gray-400">🍏 Apple Default</span>
-                        <span class="px-2.5 py-1 rounded-md bg-white/5 text-gray-400">⚖️ Balanced</span>
-                        <span class="px-2.5 py-1 rounded-md bg-white/5 text-gray-400">⚡ Performance</span>
-                        <span class="px-2.5 py-1 rounded-md bg-white/5 text-gray-400">🚀 Max</span>
-                        <span class="px-2.5 py-1 rounded-md bg-brand-cyan/20 border border-brand-cyan/40 text-brand-cyan font-bold">🧠 Smart (Active)</span>
-                    </div>
-                    <span class="text-gray-500 font-mono text-[11px]">Polling 100ms</span>
+                <div class="relative bg-black aspect-video flex items-center justify-center">
+                    <video id="fanc-launch-video" class="w-full h-full object-cover" poster="brag.jpg" playsinline preload="metadata">
+                        <source src="brag.mp4" type="video/mp4">
+                        Your browser does not support HTML5 video.
+                    </video>
                 </div>
             </div>
-        </div>
-    </section>
 
-    <!-- Why FanC -->
-    <section id="why-fanc" class="py-20 bg-black/30 border-y border-white/5">
-        <div class="max-w-6xl mx-auto px-6">
-            <h2 class="text-3xl font-bold mb-4 text-center">Why FanC?</h2>
-            <p class="text-gray-400 text-center max-w-2xl mx-auto mb-12">
-                Traditional tools charge $15–$20 for legacy software with single-sensor limits and no CLI. FanC re-engineers thermal management for Apple Silicon from first principles.
-            </p>
+        </section>
 
-            <div class="overflow-x-auto">
-                <table class="w-full text-left border-collapse text-sm">
+        <!-- Interactive Sandbox: Thermal Simulator & Adaptive RPM Gauge -->
+        <section class="max-w-6xl mx-auto px-4 sm:px-6 py-12">
+            <div class="border border-borderLine-light dark:border-borderLine-dark rounded-xl p-6 bg-panel-light dark:bg-panel-dark">
+                
+                <div class="flex flex-col sm:flex-row sm:items-center justify-between mb-8 gap-3">
+                    <div>
+                        <div class="flex items-center space-x-2">
+                            <span class="w-2 h-2 rounded-full bg-amber-fanc"></span>
+                            <span class="font-mono text-xs uppercase tracking-wider text-amber-fanc font-bold">THERMAL DYNAMICS SIMULATOR</span>
+                        </div>
+                        <h3 class="text-xl font-bold tracking-tight mt-1">Simulate Apple Silicon Temperature Response</h3>
+                        <p class="text-xs text-ink-mutedLight dark:text-ink-mutedDark">
+                            Drag the slider to test FanC's proactive acoustic curve and 95°C safety override.
+                        </p>
+                    </div>
+
+                    <div class="font-mono text-xs text-ink-faintLight">
+                        <span id="thermal-state-label" class="px-2 py-1 rounded border border-borderLine-light dark:border-borderLine-dark font-bold text-emerald-500">
+                            NOMINAL / PASSIVE
+                        </span>
+                    </div>
+                </div>
+
+                <!-- Interactive RPM & Temperature Display -->
+                <div class="grid grid-cols-1 md:grid-cols-3 gap-6 items-center">
+                    
+                    <!-- Left: Slider Control -->
+                    <div class="md:col-span-2 space-y-4 font-mono text-xs">
+                        <div class="flex justify-between items-center">
+                            <span class="text-ink-mutedLight dark:text-ink-mutedDark">SIMULATED DIE TEMPERATURE:</span>
+                            <span id="temp-val" class="text-2xl font-bold font-sans text-emerald-500">42°C</span>
+                        </div>
+                        
+                        <input id="temp-slider" oninput="updateThermalSim(this.value)" type="range" min="35" max="100" value="42" 
+                               class="w-full accent-amber-500 cursor-pointer">
+
+                        <div class="flex justify-between text-[11px] text-ink-faintLight">
+                            <span>35°C (Idle)</span>
+                            <span>65°C (Xcode / Render)</span>
+                            <span>85°C (Heavy Load)</span>
+                            <span class="text-red-500 font-bold">95°C+ (Thermal Limit)</span>
+                        </div>
+
+                        <!-- Thermal Curve Legend -->
+                        <div class="p-3 rounded border border-borderLine-light dark:border-borderLine-dark bg-panel-subtleLight dark:bg-panel-subtleDark text-[11px] space-y-1 text-ink-mutedLight dark:text-ink-mutedDark">
+                            <div class="flex justify-between">
+                                <span>Apple Default:</span>
+                                <span class="text-neutral-400">Fans stay at 0 RPM until 90°C (Causes Throttling)</span>
+                            </div>
+                            <div class="flex justify-between font-bold text-amber-fanc">
+                                <span>FanC Proactive:</span>
+                                <span id="fanc-status-detail">Smooth ramp at 55°C maintains 100% peak turbo frequency</span>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Right: Animated Dual Tachometer Gauge -->
+                    <div class="p-6 border border-borderLine-light dark:border-borderLine-dark rounded-xl bg-panel-subtleLight dark:bg-panel-subtleDark flex flex-col items-center justify-center text-center font-mono">
+                        
+                        <!-- Spinning Fan SVG -->
+                        <div class="w-20 h-20 relative flex items-center justify-center mb-3">
+                            <svg id="fan-icon" class="w-16 h-16 text-amber-fanc fan-blade" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                                <path d="M12 12c0-3 2.5-5.5 5.5-5.5S23 9 23 12s-2.5 5.5-5.5 5.5S12 15 12 12z"></path>
+                                <path d="M12 12c-3 0-5.5-2.5-5.5-5.5S9 1 12 1s5.5 2.5 5.5 5.5S15 12 12 12z"></path>
+                                <path d="M12 12c0 3-2.5 5.5-5.5 5.5S1 15 1 12s2.5-5.5 5.5-5.5S12 9 12 12z"></path>
+                                <path d="M12 12c3 0 5.5 2.5 5.5 5.5S15 23 12 23s-5.5-2.5-5.5-5.5S9 12 12 12z"></path>
+                            </svg>
+                        </div>
+
+                        <div class="text-[10px] text-ink-faintLight uppercase tracking-wider">Fan Tachometer</div>
+                        <div id="rpm-val" class="text-3xl font-bold font-sans text-ink-strongLight dark:text-ink-strongDark my-1">0 RPM</div>
+                        <div class="text-[10px] text-emerald-500 font-bold" id="acoustic-val">SILENT (0 dB)</div>
+
+                    </div>
+
+                </div>
+
+            </div>
+        </section>
+
+        <!-- Technical Manifesto Bento Grid (6 Pillars - ArtCraft Style with Spotlight) -->
+        <section class="border-t border-borderLine-light dark:border-borderLine-dark py-20 bg-panel-subtleLight/40 dark:bg-panel-subtleDark/40">
+            <div class="max-w-6xl mx-auto px-4 sm:px-6">
+                
+                <div class="flex flex-col md:flex-row md:items-end justify-between mb-12">
+                    <div>
+                        <div class="font-mono text-xs text-amber-fanc tracking-wider uppercase mb-2">Hardware Principles</div>
+                        <h2 class="text-3xl sm:text-5xl font-bold tracking-tight">Thermal precision for Apple Silicon.</h2>
+                    </div>
+                    <p class="text-ink-mutedLight dark:text-ink-mutedDark font-mono text-xs max-w-md mt-4 md:mt-0">
+                        Designed to protect thermal health and prevent silicon degradation during prolonged compilation or 3D rendering.
+                    </p>
+                </div>
+
+                <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 border-t border-l border-borderLine-light dark:border-borderLine-dark">
+                    
+                    <!-- 01 -->
+                    <div class="spotlight-card p-8 border-r border-b border-borderLine-light dark:border-borderLine-dark bg-panel-light dark:bg-panel-dark flex flex-col justify-between group hover:bg-panel-subtleLight dark:hover:bg-panel-subtleDark transition-colors">
+                        <div>
+                            <div class="flex items-center justify-between font-mono text-xs text-ink-mutedLight dark:text-ink-mutedDark mb-6">
+                                <span class="text-amber-fanc font-bold">01 / ARCHITECTURE</span>
+                                <span>DIRECT SMC</span>
+                            </div>
+                            <h3 class="text-xl font-semibold mb-3 tracking-tight">Direct Hardware SMC</h3>
+                            <p class="text-sm text-ink-mutedLight dark:text-ink-mutedDark leading-relaxed">
+                                Connects directly to Apple Silicon System Management Controller (SMC) key registers to poll fan RPMs and thermal sensor matrix in real-time.
+                            </p>
+                        </div>
+                        <div class="mt-8 pt-4 border-t border-borderLine-light/60 dark:border-borderLine-dark/60 font-mono text-[11px] text-ink-faintLight dark:text-ink-faintDark">
+                            Zero Kernel Extension · User-Space Swift
+                        </div>
+                    </div>
+
+                    <!-- 02 -->
+                    <div class="spotlight-card p-8 border-r border-b border-borderLine-light dark:border-borderLine-dark bg-panel-light dark:bg-panel-dark flex flex-col justify-between group hover:bg-panel-subtleLight dark:hover:bg-panel-subtleDark transition-colors">
+                        <div>
+                            <div class="flex items-center justify-between font-mono text-xs text-ink-mutedLight dark:text-ink-mutedDark mb-6">
+                                <span class="text-amber-fanc font-bold">02 / PROACTIVE</span>
+                                <span>TURBO HEADROOM</span>
+                            </div>
+                            <h3 class="text-xl font-semibold mb-3 tracking-tight">Proactive Pre-Cooling</h3>
+                            <p class="text-sm text-ink-mutedLight dark:text-ink-mutedDark leading-relaxed">
+                                Don't wait until the chassis is scorching. FanC gently ramps air flow at 60°C so your Mac stays cool and never drops CPU frequency down to throttled states.
+                            </p>
+                        </div>
+                        <div class="mt-8 pt-4 border-t border-borderLine-light/60 dark:border-borderLine-dark/60 font-mono text-[11px] text-ink-faintLight dark:text-ink-faintDark">
+                            Sustained Cinebench &amp; Xcode Performance
+                        </div>
+                    </div>
+
+                    <!-- 03 -->
+                    <div class="spotlight-card p-8 border-r border-b border-borderLine-light dark:border-borderLine-dark bg-panel-light dark:bg-panel-dark flex flex-col justify-between group hover:bg-panel-subtleLight dark:hover:bg-panel-subtleDark transition-colors">
+                        <div>
+                            <div class="flex items-center justify-between font-mono text-xs text-ink-mutedLight dark:text-ink-mutedDark mb-6">
+                                <span class="text-amber-fanc font-bold">03 / SAFETY</span>
+                                <span>95°C OVERRIDE</span>
+                            </div>
+                            <h3 class="text-xl font-semibold mb-3 tracking-tight">Hardware Safety Override</h3>
+                            <p class="text-sm text-ink-mutedLight dark:text-ink-mutedDark leading-relaxed">
+                                Built with a failsafe watchdog: if any sensor hits 95°C, FanC immediately overrides custom profiles to 100% maximum RPM to guarantee zero silicon damage.
+                            </p>
+                        </div>
+                        <div class="mt-8 pt-4 border-t border-borderLine-light/60 dark:border-borderLine-dark/60 font-mono text-[11px] text-ink-faintLight dark:text-ink-faintDark">
+                            Dual Watchdog Thread · Fail-Safe Logic
+                        </div>
+                    </div>
+
+                    <!-- 04 -->
+                    <div class="spotlight-card p-8 border-r border-b border-borderLine-light dark:border-borderLine-dark bg-panel-light dark:bg-panel-dark flex flex-col justify-between group hover:bg-panel-subtleLight dark:hover:bg-panel-subtleDark transition-colors">
+                        <div>
+                            <div class="flex items-center justify-between font-mono text-xs text-ink-mutedLight dark:text-ink-mutedDark mb-6">
+                                <span class="text-amber-fanc font-bold">04 / CLI</span>
+                                <span>AUTOMATION</span>
+                            </div>
+                            <h3 class="text-xl font-semibold mb-3 tracking-tight">fanc Command-Line Suite</h3>
+                            <p class="text-sm text-ink-mutedLight dark:text-ink-mutedDark leading-relaxed">
+                                Control and poll everything from the terminal: <code class="text-amber-fanc">fanc status</code>, <code class="text-amber-fanc">fanc set 4500</code>, or integrate into CI/CD scripts to pre-cool before massive builds.
+                            </p>
+                        </div>
+                        <div class="mt-8 pt-4 border-t border-borderLine-light/60 dark:border-borderLine-dark/60 font-mono text-[11px] text-ink-faintLight dark:text-ink-faintDark">
+                            Scriptable Output · JSON Control Channel
+                        </div>
+                    </div>
+
+                    <!-- 05 -->
+                    <div class="spotlight-card p-8 border-r border-b border-borderLine-light dark:border-borderLine-dark bg-panel-light dark:bg-panel-dark flex flex-col justify-between group hover:bg-panel-subtleLight dark:hover:bg-panel-subtleDark transition-colors">
+                        <div>
+                            <div class="flex items-center justify-between font-mono text-xs text-ink-mutedLight dark:text-ink-mutedDark mb-6">
+                                <span class="text-amber-fanc font-bold">05 / TELEMETRY</span>
+                                <span>DUAL TACHOMETER</span>
+                            </div>
+                            <h3 class="text-xl font-semibold mb-3 tracking-tight">Dual Fan Visualization</h3>
+                            <p class="text-sm text-ink-mutedLight dark:text-ink-mutedDark leading-relaxed">
+                                Dedicated independent tachometer gauges for Left Fan and Right Fan (14" &amp; 16" MacBook Pro and Mac Studio) with synchronized thermal heatmap chips.
+                            </p>
+                        </div>
+                        <div class="mt-8 pt-4 border-t border-borderLine-light/60 dark:border-borderLine-dark/60 font-mono text-[11px] text-ink-faintLight dark:text-ink-faintDark">
+                            Smooth 60fps Radial Rendering
+                        </div>
+                    </div>
+
+                    <!-- 06 -->
+                    <div class="spotlight-card p-8 border-r border-b border-borderLine-light dark:border-borderLine-dark bg-panel-light dark:bg-panel-dark flex flex-col justify-between group hover:bg-panel-subtleLight dark:hover:bg-panel-subtleDark transition-colors">
+                        <div>
+                            <div class="flex items-center justify-between font-mono text-xs text-ink-mutedLight dark:text-ink-mutedDark mb-6">
+                                <span class="text-amber-fanc font-bold">06 / COMPATIBILITY</span>
+                                <span>ALL CHIPS</span>
+                            </div>
+                            <h3 class="text-xl font-semibold mb-3 tracking-tight">Apple Silicon Certified</h3>
+                            <p class="text-sm text-ink-mutedLight dark:text-ink-mutedDark leading-relaxed">
+                                Native optimization for M1, M1 Pro/Max, M2, M2 Pro/Max, M3, and M4. Automatically auto-tunes maximum RPM parameters based on the detected hardware model.
+                            </p>
+                        </div>
+                        <div class="mt-8 pt-4 border-t border-borderLine-light/60 dark:border-borderLine-dark/60 font-mono text-[11px] text-ink-faintLight dark:text-ink-faintDark">
+                            IOPlatformExpertDevice Auto-Detection
+                        </div>
+                    </div>
+
+                </div>
+            </div>
+        </section>
+
+        <!-- Technical Comparison Matrix -->
+        <section class="py-20 max-w-6xl mx-auto px-4 sm:px-6">
+            <div class="mb-10">
+                <span class="font-mono text-xs text-amber-fanc uppercase tracking-wider">Engineering Comparison</span>
+                <h2 class="text-3xl sm:text-4xl font-bold tracking-tight mt-1">Why choose FanC?</h2>
+            </div>
+
+            <div class="border border-borderLine-light dark:border-borderLine-dark rounded-lg overflow-x-auto bg-panel-light dark:bg-panel-dark">
+                <table class="w-full text-left font-mono text-xs border-collapse">
                     <thead>
-                        <tr class="border-b border-white/10 text-gray-400">
-                            <th class="py-3 px-4 font-semibold">Capability</th>
-                            <th class="py-3 px-4 font-bold text-brand-cyan bg-brand-cyan/5">FanC</th>
-                            <th class="py-3 px-4 font-medium">Macs Fan Control</th>
-                            <th class="py-3 px-4 font-medium">TG Pro</th>
+                        <tr class="border-b border-borderLine-light dark:border-borderLine-dark bg-panel-subtleLight dark:bg-panel-subtleDark text-ink-mutedLight dark:text-ink-mutedDark">
+                            <th class="p-4 font-medium uppercase tracking-wider">Capability</th>
+                            <th class="p-4 font-bold text-amber-fanc uppercase tracking-wider">FanC (Native Apple Silicon)</th>
+                            <th class="p-4 font-medium uppercase tracking-wider">macOS Factory Thermal Policy</th>
+                            <th class="p-4 font-medium uppercase tracking-wider">Legacy Intel Fan Utilities</th>
                         </tr>
                     </thead>
-                    <tbody class="divide-y divide-white/5 text-gray-300">
+                    <tbody class="divide-y divide-borderLine-light dark:divide-borderLine-dark">
                         <tr>
-                            <td class="py-3 px-4 font-medium">Adaptive Thermal Curves</td>
-                            <td class="py-3 px-4 font-bold text-emerald-400 bg-brand-cyan/5">✓ Smart rate-of-change (dT/dt)</td>
-                            <td class="py-3 px-4 text-gray-500">✗ Fixed 2-point</td>
-                            <td class="py-3 px-4 text-gray-500">✗ Step rules</td>
+                            <td class="p-4 font-sans font-medium text-ink-strongLight dark:text-ink-strongDark">Proactive Pre-Cooling</td>
+                            <td class="p-4 font-bold text-emerald-500">✓ Starts at 55°C (Prevents Heat Soak)</td>
+                            <td class="p-4 text-red-400">✗ Waits until 90°C+ thermal wall</td>
+                            <td class="p-4 text-neutral-400">⚠️ Linear curves only</td>
                         </tr>
                         <tr>
-                            <td class="py-3 px-4 font-medium">Multi-Sensor Matrix</td>
-                            <td class="py-3 px-4 font-bold text-emerald-400 bg-brand-cyan/5">✓ All 36+ SMC clusters</td>
-                            <td class="py-3 px-4 text-gray-500">✗ 1 sensor per fan</td>
-                            <td class="py-3 px-4 text-gray-400">Manual rules only</td>
+                            <td class="p-4 font-sans font-medium text-ink-strongLight dark:text-ink-strongDark">Terminal CLI Tool Included</td>
+                            <td class="p-4 font-bold text-emerald-500">✓ Native 'fanc' CLI for scripts</td>
+                            <td class="p-4 text-neutral-400">✗ None</td>
+                            <td class="p-4 text-neutral-400">⚠️ GUI only</td>
                         </tr>
                         <tr>
-                            <td class="py-3 px-4 font-medium">Proactive Cooling Engine</td>
-                            <td class="py-3 px-4 font-bold text-emerald-400 bg-brand-cyan/5">✓ Ramps before throttling</td>
-                            <td class="py-3 px-4 text-gray-500">✗ Reactive only</td>
-                            <td class="py-3 px-4 text-gray-500">✗ Reactive only</td>
+                            <td class="p-4 font-sans font-medium text-ink-strongLight dark:text-ink-strongDark">Dual Independent Tachometers</td>
+                            <td class="p-4 font-bold text-emerald-500">✓ Left &amp; Right Independent Controls</td>
+                            <td class="p-4 text-neutral-400">⚠️ Black-box daemon</td>
+                            <td class="p-4 text-neutral-400">⚠️ Legacy Intel sensors</td>
                         </tr>
                         <tr>
-                            <td class="py-3 px-4 font-medium">95°C Daemon Safety Floor</td>
-                            <td class="py-3 px-4 font-bold text-emerald-400 bg-brand-cyan/5">✓ Root daemon enforced</td>
-                            <td class="py-3 px-4 text-gray-500">✗ None</td>
-                            <td class="py-3 px-4 text-gray-400">Manual setup</td>
+                            <td class="p-4 font-sans font-medium text-ink-strongLight dark:text-ink-strongDark">95°C Hardware Safety Override</td>
+                            <td class="p-4 font-bold text-emerald-500">✓ Fail-safe thermal override</td>
+                            <td class="p-4 text-emerald-500">✓ Built-in throttle</td>
+                            <td class="p-4 text-neutral-400">⚠️ Varies</td>
                         </tr>
                         <tr>
-                            <td class="py-3 px-4 font-medium">Scriptable CLI (`fanc`)</td>
-                            <td class="py-3 px-4 font-bold text-emerald-400 bg-brand-cyan/5">✓ Full CLI + Telemetry export</td>
-                            <td class="py-3 px-4 text-gray-500">✗ No CLI</td>
-                            <td class="py-3 px-4 text-gray-500">✗ No CLI</td>
-                        </tr>
-                        <tr>
-                            <td class="py-3 px-4 font-medium">Standard Bundle ID (`com.aoh.fanc`)</td>
-                            <td class="py-3 px-4 font-bold text-emerald-400 bg-brand-cyan/5">✓ Preserves macOS TCC state</td>
-                            <td class="py-3 px-4 text-gray-500">✗ Variable</td>
-                            <td class="py-3 px-4 text-gray-500">✗ Variable</td>
-                        </tr>
-                        <tr>
-                            <td class="py-3 px-4 font-medium">Price & Freedom</td>
-                            <td class="py-3 px-4 font-bold text-brand-cyan bg-brand-cyan/5">100% Free & Open Source (MIT)</td>
-                            <td class="py-3 px-4 text-gray-400">$15.00</td>
-                            <td class="py-3 px-4 text-gray-400">$20.00</td>
+                            <td class="p-4 font-sans font-medium text-ink-strongLight dark:text-ink-strongDark">License &amp; Code Quality</td>
+                            <td class="p-4 font-bold text-emerald-500">✓ Open Source (MIT), Swift 5.9</td>
+                            <td class="p-4 text-neutral-400">Proprietary</td>
+                            <td class="p-4 text-red-400">✗ Paid license / closed source</td>
                         </tr>
                     </tbody>
                 </table>
             </div>
-        </div>
-    </section>
+        </section>
 
-    <!-- Features -->
-    <section id="features" class="py-20 bg-black/20">
-        <div class="max-w-6xl mx-auto px-6">
-            <h2 class="text-3xl font-bold mb-12 text-center">Engineered for Performance</h2>
-            <div class="grid md:grid-cols-3 gap-8">
-                <div class="p-6 rounded-2xl bg-white/5 border border-white/10 hover:border-brand-cyan/50 transition-colors">
-                    <div class="w-12 h-12 bg-brand-cyan/10 rounded-lg flex items-center justify-center mb-4 text-2xl">🌀</div>
-                    <h3 class="text-xl font-bold mb-2">Smart Adaptive Curves</h3>
-                    <p class="text-gray-400">Five tuned profiles tailored for M1 through M6 chips. Smooth mathematical curves (ease-in pos², linear, S-curve) prevent annoying fan revving.</p>
-                </div>
-                <div class="p-6 rounded-2xl bg-white/5 border border-white/10 hover:border-brand-cyan/50 transition-colors">
-                    <div class="w-12 h-12 bg-brand-cyan/10 rounded-lg flex items-center justify-center mb-4 text-2xl">⚡</div>
-                    <h3 class="text-xl font-bold mb-2">Proactive Heat Suppression</h3>
-                    <p class="text-gray-400">Anticipates thermal runaways by calculating thermal acceleration (dT/dt) in real-time, spinning fans early before CPU/GPU throttle trip points.</p>
-                </div>
-                <div class="p-6 rounded-2xl bg-white/5 border border-white/10 hover:border-brand-cyan/50 transition-colors">
-                    <div class="w-12 h-12 bg-brand-cyan/10 rounded-lg flex items-center justify-center mb-4 text-2xl">🛡️</div>
-                    <h3 class="text-xl font-bold mb-2">Dual-Layer Hardware Safety</h3>
-                    <p class="text-gray-400">A hardcoded 95°C thermal floor forces 100% cooling if any cluster spikes. A 15s watchdog auto-reverts fans to Apple defaults if the app quits.</p>
-                </div>
-                <div class="p-6 rounded-2xl bg-white/5 border border-white/10 hover:border-brand-cyan/50 transition-colors">
-                    <div class="w-12 h-12 bg-brand-cyan/10 rounded-lg flex items-center justify-center mb-4 text-2xl">📊</div>
-                    <h3 class="text-xl font-bold mb-2">Live Tachometer Telemetry</h3>
-                    <p class="text-gray-400">Dual fan tachometer visualizer shows live RPMs, power output percentages, and full thermal heatmaps for CPU, GPU, RAM, SSD, and ambient.</p>
-                </div>
-                <div class="p-6 rounded-2xl bg-white/5 border border-white/10 hover:border-brand-cyan/50 transition-colors">
-                    <div class="w-12 h-12 bg-brand-cyan/10 rounded-lg flex items-center justify-center mb-4 text-2xl">⌨️</div>
-                    <h3 class="text-xl font-bold mb-2">Scriptable 'fanc' CLI</h3>
-                    <p class="text-gray-400">Query speeds, change targets, stream live telemetry, trigger calibrations, and export CSV sessions directly from terminal scripts.</p>
-                </div>
-                <div class="p-6 rounded-2xl bg-white/5 border border-white/10 hover:border-brand-cyan/50 transition-colors">
-                    <div class="w-12 h-12 bg-brand-cyan/10 rounded-lg flex items-center justify-center mb-4 text-2xl">🚀</div>
-                    <h3 class="text-xl font-bold mb-2">Menu-Bar Native</h3>
-                    <p class="text-gray-400">Zero Dock clutter. Runs in background with standard bundle ID <code>com.aoh.fanc</code> to preserve macOS TCC permissions across builds.</p>
-                </div>
-            </div>
-        </div>
-    </section>
-
-    <!-- Upstream Heritage & Credits -->
-    <section class="py-16 px-6 border-y border-white/5 bg-gradient-to-b from-brand-cyan/5 to-transparent">
-        <div class="max-w-4xl mx-auto text-center">
-            <span class="inline-block px-3 py-1 mb-4 rounded-full bg-brand-cyan/10 border border-brand-cyan/30 text-brand-cyan text-xs font-mono">🌟 Upstream Heritage & Acknowledgments</span>
-            <h2 class="text-3xl font-bold mb-4">Proudly Built Upon ThermalForge</h2>
-            <p class="text-gray-400 leading-relaxed max-w-3xl mx-auto mb-6">
-                FanC is proudly built upon and inspired by the groundbreaking low-level Apple Silicon SMC engineering of <a href="https://github.com/ProducerGuy/ThermalForge" target="_blank" rel="noopener noreferrer" class="text-brand-cyan font-semibold hover:underline">ThermalForge</a> by <a href="https://github.com/ProducerGuy" target="_blank" rel="noopener noreferrer" class="text-white font-semibold hover:underline">ProducerGuy</a>.
-            </p>
-            <p class="text-gray-400 text-sm leading-relaxed max-w-2xl mx-auto mb-8">
-                We extend our deepest gratitude to ProducerGuy for open-sourcing the Apple Silicon SMC protocols, multi-profile curves, and daemon safety primitives that made native Apple Silicon fan control possible. FanC elevates this work with visual tachometer gauges, live sensor heatmaps, automatic update checking, and a modern macOS interface.
-            </p>
-            <a href="https://github.com/ProducerGuy/ThermalForge" target="_blank" rel="noopener noreferrer"
-               class="inline-flex items-center gap-2 px-5 py-2 rounded-lg bg-white/5 border border-white/10 hover:bg-white/10 text-gray-300 hover:text-white transition-all text-sm font-semibold">
-                <svg class="w-4 h-4 fill-current" viewBox="0 0 24 24"><path d="M12 0C5.37 0 0 5.37 0 12c0 5.31 3.435 9.795 8.205 11.385.6.105.825-.255.825-.57 0-.285-.015-1.23-.015-2.235-3.015.555-3.795-.735-4.035-1.41-.135-.345-.72-1.41-1.23-1.695-.42-.225-1.02-.78-.015-.795.945-.015 1.62.87 1.845 1.23 1.08 1.815 2.805 1.305 3.495.99.105-.78.42-1.305.765-1.605-2.67-.3-5.46-1.335-5.46-5.925 0-1.305.465-2.385 1.23-3.225-.12-.3-.54-1.53.12-3.18 0 0 1.005-.315 3.3 1.23.96-.27 1.98-.405 3-.405s2.04.135 3 .405c2.295-1.56 3.3-1.23 3.3-1.23.66 1.65.24 2.88.12 3.18.765.84 1.23 1.905 1.23 3.225 0 4.605-2.805 5.625-5.475 5.925.435.375.81 1.095.81 2.22 0 1.605-.015 2.895-.015 3.3 0 .315.225.69.825.57A12.02 12.02 0 0024 12c0-6.63-5.37-12-12-12z"/></svg>
-                <span>View ThermalForge on GitHub</span>
-            </a>
-        </div>
-    </section>
-
-    <!-- How it works -->
-    <section id="how-it-works" class="py-20 px-6">
-        <div class="max-w-4xl mx-auto">
-            <h2 class="text-3xl font-bold mb-16 text-center">How It Works</h2>
-            <div class="space-y-12">
-                <div class="flex gap-6">
-                    <div class="flex-shrink-0 w-12 h-12 rounded-full bg-brand-ink border border-white/20 flex items-center justify-center font-bold text-lg">1</div>
+        <!-- Interactive Changelog & Releases -->
+        <section id="changelog" class="border-t border-borderLine-light dark:border-borderLine-dark py-20 bg-panel-subtleLight/30 dark:bg-panel-subtleDark/30">
+            <div class="max-w-6xl mx-auto px-4 sm:px-6">
+                
+                <div class="flex flex-col sm:flex-row sm:items-end justify-between mb-10">
                     <div>
-                        <h3 class="text-xl font-bold mb-2">Read Every Cluster</h3>
-                        <p class="text-gray-400">FanC queries Apple's native SMC bus at 100ms intervals, aggregating thermal readings across CPU performance cores, GPU clusters, and memory.</p>
+                        <span class="font-mono text-xs text-amber-fanc uppercase tracking-wider">Release Telemetry</span>
+                        <h2 class="text-3xl sm:text-4xl font-bold tracking-tight mt-1">Thermal engine releases.</h2>
+                    </div>
+                    <div class="mt-4 sm:mt-0 font-mono text-xs text-ink-mutedLight dark:text-ink-mutedDark flex items-center space-x-2">
+                        <span class="w-2 h-2 rounded-full bg-emerald-500"></span>
+                        <span class="version-badge">Active v1.0.0</span>
                     </div>
                 </div>
-                <div class="flex gap-6">
-                    <div class="flex-shrink-0 w-12 h-12 rounded-full bg-brand-cyan text-black flex items-center justify-center font-bold text-lg">2</div>
-                    <div>
-                        <h3 class="text-xl font-bold mb-2 text-brand-cyan">Calculate Thermal Velocity</h3>
-                        <p class="text-gray-400">Rather than waiting until your chip throttles at 95°C, FanC detects rate-of-change and ramps up smoothly while heat is still dissipating.</p>
-                    </div>
-                </div>
-                <div class="flex gap-6">
-                    <div class="flex-shrink-0 w-12 h-12 rounded-full bg-brand-ink border border-white/20 flex items-center justify-center font-bold text-lg">3</div>
-                    <div>
-                        <h3 class="text-xl font-bold mb-2">Hardware-Safe Daemon Control</h3>
-                        <p class="text-gray-400">Fan commands are executed through a secure root daemon via <code>/var/run/fanc.sock</code>. If any sensor crosses 95°C, the daemon overrides instantly to 100%.</p>
+
+                <div id="changelog-container" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4 font-mono text-xs">
+                    <div class="p-6 rounded border border-borderLine-light dark:border-borderLine-dark bg-panel-light dark:bg-panel-dark">
+                        <div class="flex items-center justify-between mb-4">
+                            <span class="text-amber-fanc font-bold text-sm">v1.0.0 (Latest)</span>
+                            <span class="text-neutral-400 text-[11px]">2026-10-12</span>
+                        </div>
+                        <p class="text-neutral-400 text-xs">Loading updates...</p>
                     </div>
                 </div>
             </div>
-        </div>
-    </section>
+        </section>
 
-    <!-- Install -->
-    <section id="install" class="py-20 bg-white/5 border-y border-white/5">
-        <div class="max-w-6xl mx-auto px-6">
-            <h2 class="text-3xl font-bold mb-12 text-center">Installation</h2>
-            <div class="max-w-2xl mx-auto space-y-6">
-                <!-- One-liner Command -->
-                <div class="bg-black/40 border border-white/10 rounded-2xl p-8">
-                    <h3 class="text-lg font-bold mb-4 text-white flex items-center gap-2">
-                        <span>⚡ One-Click Terminal Install (Recommended)</span>
-                    </h3>
-                    <p class="text-gray-400 text-sm mb-6 leading-relaxed">
-                        The easiest and fastest way to install FanC. Copy and paste this command into your Terminal:
-                    </p>
-                    <div class="bg-black/60 border border-white/10 rounded-xl p-4 flex items-center justify-between font-mono text-sm overflow-x-auto gap-4">
-                        <span class="text-brand-cyan select-all break-all text-left">/bin/bash -c "$(curl -fsSL https://raw.githubusercontent.com/arunofhyd/FanC/main/install-fanc.command)"</span>
-                        <button id="btn-copy-command" onclick="copyToClipboard('/bin/bash -c &quot;$(curl -fsSL https://raw.githubusercontent.com/arunofhyd/FanC/main/install-fanc.command)&quot;', 'btn-copy-command')"
-                                class="flex-shrink-0 bg-brand-cyan/10 border border-brand-cyan/30 text-brand-cyan hover:bg-brand-cyan hover:text-black px-3 py-1.5 rounded-lg text-xs font-semibold font-sans transition-all">
-                            Copy
-                        </button>
-                    </div>
-                </div>
-
-                <!-- Manual fallback -->
-                <div class="bg-black/40 border border-white/10 rounded-2xl p-8">
-                    <h3 class="text-lg font-bold mb-4 text-white">Manual Installation (Fallback)</h3>
-                    <ol class="space-y-3 text-gray-300 list-decimal list-inside text-sm">
-                        <li><a href="install-fanc.command" download="install-fanc.command" class="text-brand-cyan underline font-semibold hover:text-white transition-colors">Download install-fanc.command</a> file manually.</li>
-                        <li><span class="font-semibold text-white">Open Terminal</span> (⌘+Space, type "Terminal", press Enter).</li>
-                        <li>Type <span class="text-brand-cyan font-mono">sh </span> — that's <span class="font-semibold text-white">s</span>, <span class="font-semibold text-white">h</span>, then a <span class="font-semibold text-white">space</span>.</li>
-                        <li><span class="font-semibold text-white">Drag and drop</span> the downloaded file into Terminal.</li>
-                        <li>Press <span class="font-semibold text-white">Enter</span> to build and install FanC to <code>/Applications</code>.</li>
-                    </ol>
-                </div>
-            </div>
-            <div class="mt-6 p-4 bg-black rounded border border-white/10 text-xs text-gray-500 font-mono break-all whitespace-pre-wrap max-w-2xl mx-auto"><span class="text-green-400">user@macbook ~ %</span> /bin/bash -c "$(curl -fsSL https://raw.githubusercontent.com/arunofhyd/FanC/main/install-fanc.command)"<br><span class="text-brand-cyan">▸</span> Compiling native Swift binaries locally…</div>
-            <p class="text-center text-gray-500 text-sm mt-6 max-w-2xl mx-auto">First time only: built locally on your machine so macOS Gatekeeper trusts it with zero quarantine warnings.</p>
-        </div>
-    </section>
-
-    <!-- Changelog -->
-    <section id="changelog" class="py-12 bg-black/40 border-b border-white/5">
-        <div class="max-w-6xl mx-auto px-6">
-            <div class="flex items-center justify-between mb-8">
+        <!-- Colophon / Footer -->
+        <footer class="border-t border-borderLine-light dark:border-borderLine-dark py-16 bg-canvas-light dark:bg-canvas-dark transition-colors duration-200">
+            <div class="max-w-6xl mx-auto px-4 sm:px-6 flex flex-col md:flex-row justify-between items-start md:items-center gap-8 font-mono text-xs text-ink-mutedLight dark:text-ink-mutedDark">
+                
                 <div>
-                    <h2 class="text-2xl font-bold text-gray-200">Release Notes</h2>
-                    <p class="text-xs text-gray-400 mt-1">Scroll sideways to explore version history</p>
+                    <div class="flex items-center space-x-2.5 mb-2">
+                        <img src="logo.svg" alt="FanC" class="w-4 h-4 rounded">
+                        <span class="font-bold text-sm tracking-tight font-sans text-neutral-900 dark:text-white">FANC</span>
+                        <span class="text-neutral-400">/</span>
+                        <span>BY ARUN THOMAS</span>
+                    </div>
+                    <p class="text-ink-faintLight dark:text-ink-faintDark max-w-sm font-sans text-xs">
+                        Open-source software engineered for speed, privacy, and thermal health on macOS.
+                    </p>
                 </div>
-                <div class="flex items-center gap-2">
-                    <button onclick="scrollCarousel('changelog-container', -360)" class="w-9 h-9 rounded-full bg-white/5 border border-white/10 text-gray-300 hover:text-white hover:bg-white/10 flex items-center justify-center transition-all">←</button>
-                    <button onclick="scrollCarousel('changelog-container', 360)" class="w-9 h-9 rounded-full bg-white/5 border border-white/10 text-gray-300 hover:text-white hover:bg-white/10 flex items-center justify-center transition-all">→</button>
+
+                <div class="flex flex-wrap items-center gap-6">
+                    <a href="https://github.com/arunofhyd/FanC" target="_blank" rel="noopener noreferrer" class="hover:text-amber-fanc transition-colors">GitHub Repository ↗</a>
+                    <a href="https://github.com/arunofhyd/FanC/blob/main/LICENSE" target="_blank" rel="noopener noreferrer" class="hover:text-amber-fanc transition-colors">MIT License</a>
+                    <a href="https://arunofhyd.github.io/my-portfolio/" target="_blank" rel="noopener noreferrer" class="hover:text-amber-fanc transition-colors">Developer Portfolio ↗</a>
+                    <a href="mailto:arunthomas04042001@gmail.com" class="hover:text-amber-fanc transition-colors">Contact</a>
                 </div>
-            </div>
-            <div id="changelog-container" class="flex gap-6 overflow-x-auto pb-6 snap-x snap-mandatory scroll-smooth">
-                <div class="text-center text-gray-500 animate-pulse w-full py-8">Loading updates…</div>
-            </div>
-        </div>
-    </section>
 
-    <!-- Footer -->
-    <footer class="py-6 border-t border-white/10 text-center">
-        <div class="flex flex-col md:flex-row justify-center items-center gap-4 md:gap-8 text-xs text-gray-500">
-            <div>Built by <span class="text-white">Arun Thomas</span></div>
-            <button onclick="copyEmail(this)" class="hover:text-brand-cyan transition-colors bg-transparent border-none cursor-pointer">Contact Developer</button>
-            <div class="text-gray-700">&copy; 2026 FanC.</div>
-        </div>
-    </footer>
+            </div>
+        </footer>
 
+    </main>
+
+    <!-- Interactive Client Scripts -->
     <script>
-        function scrollCarousel(id, amount) {
-            const el = document.getElementById(id);
-            if (el) el.scrollBy({ left: amount, behavior: 'smooth' });
-        }
-
-        function toggleVideoPlayback() {
+        function toggleFancVideo() {
             const video = document.getElementById('fanc-launch-video');
-            const btn = document.getElementById('video-action-btn');
+            const btn = document.getElementById('fanc-video-btn');
             if (!video) return;
             if (video.paused) {
                 video.play();
@@ -522,103 +628,137 @@
             }
         }
 
+        // Spotlight Cursor Tracking
+        document.addEventListener('mousemove', (e) => {
+            const cards = document.querySelectorAll('.spotlight-card');
+            cards.forEach(card => {
+                const rect = card.getBoundingClientRect();
+                const x = e.clientX - rect.left;
+                const y = e.clientY - rect.top;
+                card.style.setProperty('--mouse-x', `${x}px`);
+                card.style.setProperty('--mouse-y', `${y}px`);
+            });
+        });
+
+        // Interactive Thermal Simulator Curve
+        function updateThermalSim(temp) {
+            temp = parseInt(temp);
+            const tempVal = document.getElementById('temp-val');
+            const rpmVal = document.getElementById('rpm-val');
+            const stateLabel = document.getElementById('thermal-state-label');
+            const acousticVal = document.getElementById('acoustic-val');
+            const detail = document.getElementById('fanc-status-detail');
+            const fanIcon = document.getElementById('fan-icon');
+
+            tempVal.textContent = `${temp}°C`;
+
+            let rpm = 0;
+            let speed = '0s';
+
+            if (temp < 50) {
+                rpm = 0;
+                tempVal.className = 'text-2xl font-bold font-sans text-emerald-500';
+                stateLabel.textContent = 'NOMINAL / PASSIVE';
+                stateLabel.className = 'px-2 py-1 rounded border border-borderLine-light dark:border-borderLine-dark font-bold text-emerald-500';
+                acousticVal.textContent = 'SILENT (0 dB)';
+                acousticVal.className = 'text-[10px] text-emerald-500 font-bold';
+                detail.textContent = 'Chassis cool. Fans idle to preserve zero acoustic distraction.';
+                fanIcon.style.animationPlayState = 'paused';
+            } else if (temp < 70) {
+                rpm = Math.floor(1200 + (temp - 50) * 80);
+                tempVal.className = 'text-2xl font-bold font-sans text-amber-500';
+                stateLabel.textContent = 'PROACTIVE GLIDE';
+                stateLabel.className = 'px-2 py-1 rounded border border-borderLine-light dark:border-borderLine-dark font-bold text-amber-500';
+                acousticVal.textContent = 'WHISPER (18 dB)';
+                acousticVal.className = 'text-[10px] text-amber-500 font-bold';
+                detail.textContent = 'Gentle airflow initiated before thermal heat soak sets in.';
+                fanIcon.style.animationPlayState = 'running';
+                fanIcon.style.setProperty('--fan-speed', '1.5s');
+            } else if (temp < 92) {
+                rpm = Math.floor(2800 + (temp - 70) * 120);
+                tempVal.className = 'text-2xl font-bold font-sans text-orange-500';
+                stateLabel.textContent = 'TURBO STABILIZATION';
+                stateLabel.className = 'px-2 py-1 rounded border border-borderLine-light dark:border-borderLine-dark font-bold text-orange-500';
+                acousticVal.textContent = 'SUSTAINED (32 dB)';
+                acousticVal.className = 'text-[10px] text-orange-500 font-bold';
+                detail.textContent = 'Full turbo headroom maintained. Zero clock throttling.';
+                fanIcon.style.animationPlayState = 'running';
+                fanIcon.style.setProperty('--fan-speed', '0.6s');
+            } else {
+                rpm = 5800;
+                tempVal.className = 'text-2xl font-bold font-sans text-red-500 animate-pulse';
+                stateLabel.textContent = '⚠️ 95°C SAFETY OVERRIDE';
+                stateLabel.className = 'px-2 py-1 rounded border border-red-500 font-bold text-red-500 bg-red-500/10';
+                acousticVal.textContent = 'MAX PERFORMANCE (44 dB)';
+                acousticVal.className = 'text-[10px] text-red-500 font-bold';
+                detail.textContent = 'Maximum hardware airflow engaged. Die cooling emergency purge.';
+                fanIcon.style.animationPlayState = 'running';
+                fanIcon.style.setProperty('--fan-speed', '0.15s');
+            }
+
+            rpmVal.textContent = `${rpm} RPM`;
+        }
+
         document.addEventListener('DOMContentLoaded', function() {
+            updateThermalSim(42);
+
             const vid = document.getElementById('fanc-launch-video');
             if (vid) {
                 vid.addEventListener('play', () => {
-                    const btn = document.getElementById('video-action-btn');
+                    const btn = document.getElementById('fanc-video-btn');
                     if (btn) btn.textContent = '⏸ Pause Film';
                 });
                 vid.addEventListener('pause', () => {
-                    const btn = document.getElementById('video-action-btn');
+                    const btn = document.getElementById('fanc-video-btn');
                     if (btn) btn.textContent = '▶ Play Film';
                 });
-                vid.addEventListener('ended', () => {
-                    const btn = document.getElementById('video-action-btn');
-                    if (btn) btn.textContent = '▶ Replay Film';
-                });
             }
-        });
 
-        // Version pill & changelog from version.json
-        fetch('version.json').then(r => r.json()).then(data => {
-            if (data.version) {
-                const pill = document.getElementById('version-pill');
-                if (pill) {
-                    pill.innerHTML = `<span>v${data.version} Now Available</span> <span class="opacity-60 text-[10px]">↗</span>`;
-                    pill.href = `https://github.com/arunofhyd/FanC/releases/tag/v${data.version}`;
-                }
-
-                const schema = document.querySelector('script[type="application/ld+json"]');
-                if (schema) {
-                    let json = JSON.parse(schema.textContent);
-                    json.softwareVersion = data.version;
-                    schema.textContent = JSON.stringify(json);
-                }
-
-                // Dynamically update favicon cache-busters from version.json
-                document.querySelectorAll('link[rel*="icon"]').forEach(link => {
-                    if (link.href) {
-                        const u = new URL(link.href, window.location.href);
-                        u.searchParams.set('v', data.version);
-                        link.href = u.toString();
+            fetch('version.json').then(r => r.json()).then(data => {
+                if (data.version) {
+                    const pill = document.getElementById('version-pill');
+                    if (pill) {
+                        pill.innerHTML = `<span>v${data.version}</span> <span class="opacity-50 text-[10px]">↗</span>`;
+                        pill.href = `https://github.com/arunofhyd/FanC/releases/tag/v${data.version}`;
                     }
-                });
-            }
+                    document.querySelectorAll('.version-label').forEach(el => el.textContent = 'v' + data.version);
+                    document.querySelectorAll('.version-badge').forEach(el => el.textContent = 'Active v' + data.version);
+                }
 
-            // Changelog Horizontal Carousel
-            const container = document.getElementById('changelog-container');
-            if (container && Array.isArray(data.changelog)) {
-                container.innerHTML = '';
-                data.changelog.forEach((release, index) => {
-                    const isLatest = index === 0;
-                    const div = document.createElement('div');
-                    div.className = `flex-none w-[320px] sm:w-[360px] snap-start bg-white/5 border ${isLatest ? 'border-brand-cyan/60 shadow-[0_0_15px_rgba(0,229,255,0.15)]' : 'border-white/10'} rounded-2xl p-6 hover:border-brand-cyan/30 transition-all flex flex-col justify-between`;
-                    
-                    const header = `<div class="flex items-center justify-between mb-4">
-                        <div class="flex items-center gap-2.5">
-                            <a href="https://github.com/arunofhyd/FanC/releases/tag/v${release.version}" target="_blank" rel="noopener noreferrer" class="text-brand-cyan font-mono font-bold text-lg hover:underline flex items-center gap-1">
-                                <span>v${release.version}</span>
-                                <span class="text-xs opacity-60">↗</span>
-                            </a>
-                            ${isLatest ? `<span class="bg-brand-cyan/20 text-brand-cyan text-[10px] font-bold px-2 py-0.5 rounded-full border border-brand-cyan/30 tracking-wider">LATEST</span>` : ''}
-                        </div>
-                        ${release.date ? `<span class="text-gray-400 text-xs font-mono px-2 py-0.5 rounded bg-white/5 border border-white/5">${release.date}</span>` : ''}
-                    </div>`;
-                    const list = document.createElement('ul');
-                    list.className = 'space-y-2 text-gray-400 text-sm list-disc list-inside overflow-y-auto max-h-[160px] pr-1';
-                    (release.changes || []).forEach(change => {
-                        const li = document.createElement('li');
-                        li.className = 'leading-relaxed';
-                        li.textContent = change;
-                        list.appendChild(li);
+                const container = document.getElementById('changelog-container');
+                if (container && Array.isArray(data.changelog)) {
+                    container.innerHTML = '';
+                    data.changelog.slice(0, 6).forEach((release, index) => {
+                        const isLatest = index === 0;
+                        const card = document.createElement('div');
+                        card.className = `spotlight-card p-6 rounded border ${isLatest ? 'border-amber-fanc/60 bg-panel-light dark:bg-panel-dark' : 'border-borderLine-light dark:border-borderLine-dark bg-panel-light dark:bg-panel-dark'} flex flex-col justify-between`;
+                        
+                        let changesHtml = (release.changes || []).map(c => `
+                            <li class="leading-relaxed text-ink-mutedLight dark:text-ink-mutedDark text-xs font-sans list-disc list-inside">
+                                ${c}
+                            </li>
+                        `).join('');
+
+                        card.innerHTML = `
+                            <div>
+                                <div class="flex items-center justify-between mb-4">
+                                    <div class="flex items-center space-x-2">
+                                        <a href="https://github.com/arunofhyd/FanC/releases/tag/v${release.version}" target="_blank" rel="noopener noreferrer" class="font-bold text-amber-fanc hover:underline text-sm font-mono">
+                                            v${release.version}
+                                        </a>
+                                        ${isLatest ? `<span class="px-1.5 py-0.5 rounded text-[10px] bg-amber-fanc/10 border border-amber-fanc/30 text-amber-fanc font-semibold">LATEST</span>` : ''}
+                                    </div>
+                                    <span class="text-ink-faintLight dark:text-ink-faintDark text-[11px] font-mono">${release.date || ''}</span>
+                                </div>
+                                <ul class="space-y-2 mt-2">
+                                    ${changesHtml}
+                                </ul>
+                            </div>
+                        `;
+                        container.appendChild(card);
                     });
-                    div.innerHTML = header;
-                    div.appendChild(list);
-                    container.appendChild(div);
-                });
-            }
-        }).catch(() => {
-            const c = document.getElementById('changelog-container');
-            if (c) c.innerHTML = '<div class="text-red-500 text-center text-sm">Failed to load updates.</div>';
-        });
-
-        // Typing effect
-        document.addEventListener('DOMContentLoaded', function() {
-            const el = document.getElementById('typing-text');
-            if (!el) return;
-            const phrases = ["Kept ice cool.", "Whisper quiet.", "Hardware safe.", "Proactively cooled."];
-            let pi = 0, ci = 0, deleting = false, speed = 100;
-            function type() {
-                const cur = phrases[pi];
-                if (deleting) { el.textContent = cur.substring(0, ci - 1); ci--; speed = 50; }
-                else { el.textContent = cur.substring(0, ci + 1); ci++; speed = 100; }
-                if (!deleting && ci === cur.length) { deleting = true; speed = 2000; }
-                else if (deleting && ci === 0) { deleting = false; pi = (pi + 1) % phrases.length; speed = 500; }
-                setTimeout(type, speed);
-            }
-            el.textContent = '';
-            setTimeout(type, 500);
+                }
+            }).catch(() => {});
         });
     </script>
 </body>
